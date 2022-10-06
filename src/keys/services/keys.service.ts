@@ -2,6 +2,8 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { keys } from 'src/database/entity/keys.entity';
 import { AppDataSource } from 'src/database';
 import { CreateKeysDto } from '../dtos/create-keys.dto';
+import { EditKeysDto } from '../dtos/edit-keys.dto';
+import { DeleteKeysDto } from '../dtos/delete-keys.dto';
 
 @Injectable()
 export class KeysService {
@@ -31,7 +33,23 @@ export class KeysService {
 
   async findOne(id: number): Promise<any> {
     const keyRepository = AppDataSource.getRepository(keys);
-    const keyId = await keyRepository.findOneBy({ id: id }); //busca por id
-    return keyId;
+    const oneKey = await keyRepository.findOneBy({ id: id }); //busca por id
+    return oneKey;
+  }
+
+  async editKey(editKeyDto: EditKeysDto): Promise<any> {
+    const { id, isPublished } = editKeyDto;
+    const keyRepository = AppDataSource.getRepository(keys);
+    const keyToEdit = await keyRepository.findOneBy({ id: id }); //busca por id
+    keyToEdit.isPublished = isPublished; //edito la field 'isPublished'
+    await keyRepository.save(keyToEdit);
+    return keyToEdit;
+  }
+  async deleteKey(deleteKeyDto: DeleteKeysDto): Promise<any> {
+    const { id } = deleteKeyDto;
+    const keyRepository = AppDataSource.getRepository(keys);
+    const keyToRemove = await keyRepository.findOneBy({ id: id }); //busca por id
+    await keyRepository.remove(keyToRemove);
+    return keyToRemove;
   }
 }
