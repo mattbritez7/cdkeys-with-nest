@@ -40,15 +40,16 @@ export class KeysService {
   async editKey(editKeyDto: EditKeysDto): Promise<any> {
     const { id, isPublished } = editKeyDto;
     const keyRepository = AppDataSource.getRepository(keys);
-    const keyToEdit = await keyRepository.findOneBy({ id: id }); //busca por id
+    const keyToEdit = await keyRepository.findOneByOrFail({ id: id }); //busca por id
     keyToEdit.isPublished = isPublished; //edito la field 'isPublished'
     await keyRepository.save(keyToEdit);
     return keyToEdit;
   }
-  async deleteKey(deleteKeyDto: DeleteKeysDto): Promise<any> {
+
+  async deleteKey(deleteKeyDto: DeleteKeysDto): Promise<object> {
     const { id } = deleteKeyDto;
     const keyRepository = AppDataSource.getRepository(keys);
-    const keyToRemove = await keyRepository.findOneBy({ id: id }); //busca por id
+    const keyToRemove = await keyRepository.findOneByOrFail({ id: id }); //busca por id
     await keyRepository.remove(keyToRemove);
     return keyToRemove;
   }
