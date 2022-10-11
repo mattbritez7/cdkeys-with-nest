@@ -3,6 +3,7 @@ import { UsersService } from '../services/users.services';
 import { FindUsersDto } from '../dtos/find.users.dto';
 import { CreateUsersDto } from '../dtos/create.users.dto';
 import { DeleteUsersDto } from '../dtos/delete.users.dto';
+import { LoginUsersDto } from '../dtos/login.users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -26,5 +27,9 @@ export class UsersController {
   @Put('edit')
   editUser(): any {
     return this.usersService.editUser();
+  }
+  @Post('login')
+  loginUser(@Body() loginUserDto: LoginUsersDto): any {
+    return this.usersService.loginUser(loginUserDto);
   }
 }
