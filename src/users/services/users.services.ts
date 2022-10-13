@@ -3,10 +3,6 @@ import * as jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
 import { users } from '../../database/entity/users.entity';
 import { AppDataSource } from 'src/database';
-import { FindUsersDto } from '../dtos/find.users.dto';
-import { CreateUsersDto } from '../dtos/create.users.dto';
-import { DeleteUsersDto } from '../dtos/delete.users.dto';
-import { LoginUsersDto } from '../dtos/login.users.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +12,7 @@ export class UsersService {
     return allUsers;
   }
 
-  async findOne(findUsersDto: FindUsersDto): Promise<object> {
+  async findOne(findUsersDto: any): Promise<object> {
     const { email } = findUsersDto;
     const userReposity = AppDataSource.getRepository(users);
     const allUsers = await userReposity.find({
@@ -27,7 +23,7 @@ export class UsersService {
     return allUsers;
   }
 
-  async createUser(createUsersDto: CreateUsersDto): Promise<any> {
+  async createUser(createUsersDto: any): Promise<any> {
     try {
       const { email, password, isAdmin } = createUsersDto;
       const saltRounds = 10;
@@ -45,7 +41,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(deleteUsersDto: DeleteUsersDto): Promise<object> {
+  async deleteUser(deleteUsersDto: any): Promise<object> {
     const { email } = deleteUsersDto;
     const userReposity = AppDataSource.getRepository(users);
     const userToDelete = await userReposity.find({
@@ -62,7 +58,7 @@ export class UsersService {
     console.log(usersRepository);
   }
 
-  async loginUser(loginUserDto: LoginUsersDto): Promise<any> {
+  async loginUser(loginUserDto: any): Promise<any> {
     try {
       const { email, password } = loginUserDto;
       const userReposity = AppDataSource.getRepository(users);
