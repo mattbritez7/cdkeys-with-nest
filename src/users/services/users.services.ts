@@ -15,6 +15,7 @@ export class UsersService {
     const allUsers = await userReposity.find();
     return allUsers;
   }
+
   async findOne(findUsersDto: FindUsersDto): Promise<object> {
     const { email } = findUsersDto;
     const userReposity = AppDataSource.getRepository(users);
@@ -25,6 +26,7 @@ export class UsersService {
     });
     return allUsers;
   }
+
   async createUser(createUsersDto: CreateUsersDto): Promise<any> {
     try {
       const { email, password, isAdmin } = createUsersDto;
@@ -42,6 +44,7 @@ export class UsersService {
       console.error(Error);
     }
   }
+
   async deleteUser(deleteUsersDto: DeleteUsersDto): Promise<object> {
     const { email } = deleteUsersDto;
     const userReposity = AppDataSource.getRepository(users);
@@ -53,10 +56,12 @@ export class UsersService {
     await userReposity.remove(userToDelete);
     return userToDelete;
   }
+
   async editUser(): Promise<any> {
     const usersRepository = AppDataSource.getRepository(users);
     console.log(usersRepository);
   }
+
   async loginUser(loginUserDto: LoginUsersDto): Promise<any> {
     try {
       const { email, password } = loginUserDto;
@@ -82,6 +87,15 @@ export class UsersService {
       }
     } catch (err) {
       console.log(err);
+    }
+  }
+  async detailUser(req: any): Promise<any> {
+    try {
+      const tokenUser = req.headers.authorization;
+      const decoded = jwt.verify(tokenUser, 'JWT_SECRET');
+      return decoded;
+    } catch (err) {
+      console.error(err);
     }
   }
 }
